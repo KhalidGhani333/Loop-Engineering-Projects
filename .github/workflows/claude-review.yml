@@ -1,0 +1,34 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pytest
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Review this pull request.
+            Only consider changes inside the doorbell/ directory. Ignore everything else in this repo.
+            Run pytest from inside doorbell/ and read the actual output.
+            Then read the diff and look for bugs, off-by-one errors, and edge cases the tests do not cover.
+            Post one comment on the PR: PASS with one line saying what you verified, or FAIL with the specific reasons, one per line.
+            A change that only makes the tests green is not a PASS.
