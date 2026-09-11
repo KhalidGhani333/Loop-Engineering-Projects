@@ -3,3 +3,4 @@ __pycache__/
 .pytest_cache/
 .claude/scheduled_tasks.lock
 *.lock
+.claude/worktrees/ 
