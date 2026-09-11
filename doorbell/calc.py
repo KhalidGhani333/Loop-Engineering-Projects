@@ -16,3 +16,6 @@ def running_total(prices):
 
 def top_n(prices, n):
     return sorted(prices, reverse=True)[:n]
+
+def last_n(prices, n):
+    return prices[len(prices) - n - 1:]
